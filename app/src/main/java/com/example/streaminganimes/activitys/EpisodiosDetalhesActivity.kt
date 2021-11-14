@@ -26,7 +26,7 @@ class EpisodiosDetalhesActivity : AppCompatActivity() {
     private var duracao: String? = ""
     private var tipo: String? = ""
     private var imagem: String? = ""
-    private var filler: Boolean? = null
+    private var filler: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
