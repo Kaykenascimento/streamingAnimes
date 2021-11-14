@@ -23,7 +23,7 @@
             <ImageView
                 android:id="@+id/ivAnimesDet"
                 android:layout_width="0dp"
-                android:layout_height="650dp"
+                android:layout_height="600dp"
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
                 app:layout_constraintEnd_toEndOf="parent"

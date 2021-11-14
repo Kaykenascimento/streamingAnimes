@@ -3,7 +3,12 @@ package com.example.streaminganimes.activitys
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
 import android.view.View
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
+import android.widget.SearchView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.streaminganimes.R
 import com.example.streaminganimes.classes.RecyclerItemClickListener
@@ -13,30 +18,35 @@ import com.example.streaminganimes.extensions.formatarData
 import com.example.streaminganimes.firebase.ConfFireBase
 import com.example.streaminganimes.models.ModelEpisodios
 import com.example.streaminganimes.models.ModelFavoritos
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_anime_detalhes.*
+import kotlinx.android.synthetic.main.activity_episodios_detalhes.*
 import java.util.*
 import kotlin.collections.ArrayList
 
 class AnimeDetalhesActivity : AppCompatActivity() {
-    private val auth: FirebaseAuth = ConfFireBase.firebaseAuth!!
-    private val db: FirebaseFirestore = ConfFireBase.firebaseFirestore!!
+    private val auth: FirebaseAuth = ConfFireBase!!.firebaseAuth!!
+    private val db: FirebaseFirestore = ConfFireBase!!.firebaseFirestore!!
     private var favorito: Boolean = false
     private var codigoFavorito: String = ""
-    private var nomeAnimeInsert: String = ""
     private val usuarioDao = UsuarioDao()
     private val episodiosDao = EpisodiosDao()
     private val episodiosLista: ArrayList<ModelEpisodios> = ArrayList()
     private var tela: String = ""
+    private var nomeAnime: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_anime_detalhes)
 
         val bundle: Bundle ?= this.intent.extras
-        val nomeAnime = bundle?.getString("nomeAnime")!!
+        nomeAnime = bundle?.getString("nomeAnime")!!
         val sinopse = bundle?.getString("sinopse")!!
         val estudio = bundle?.getString("estudio")!!
         val genero = bundle?.getString("genero")!!
@@ -44,12 +54,11 @@ class AnimeDetalhesActivity : AppCompatActivity() {
         val imagemAnime = bundle?.getString("imagem")!!
         val codigoAnime = bundle?.getString("codigo")!!
         val tipo = bundle?.getString("tipo")!!
+        val qtEpisodios = bundle?.getLong("qtEps")!!
         tela = bundle?.getString("tela")!!
-        nomeAnimeInsert = nomeAnime
 
-        checarAnimeFavorito(nomeAnime)
-        carregarItens(imagemAnime, nomeAnime, sinopse, estudio, genero, ano, tipo)
-        episodiosDao.carregarEpisodios(codigoAnime, episodiosLista, rcListaEpisodios, tipo, tvListaEpisodiosDet)
+        carregarItens(imagemAnime, nomeAnime, sinopse, estudio, genero, ano, tipo, qtEpisodios!!)
+        episodiosDao.carregarEpisodios(codigoAnime, episodiosLista, rcListaEpisodios, tipo, tvListaEpisodiosDet, this)
 
         ivAnimeFavorito.setOnClickListener{
             favorito = if(favorito){
@@ -57,10 +66,18 @@ class AnimeDetalhesActivity : AppCompatActivity() {
                 checarAnimeFavorito(nomeAnime)
                 false
             } else{
-                inserirAnimeFavorito(nomeAnime, sinopse, estudio, ano, imagemAnime, genero, auth, codigoAnime)
+                inserirAnimeFavorito(nomeAnime, sinopse, estudio, ano, imagemAnime, genero, auth, codigoAnime, tipo, qtEpisodios)
                 checarAnimeFavorito(nomeAnime)
                 true
             }
+        }
+
+        btVoltarDet.setOnClickListener {
+            if(tela == AssistirEpActivity::class.java.simpleName) {
+                val intent = Intent(this, inicioActivity::class.java)
+                startActivity(intent)
+            }
+            onBackPressed()
         }
 
         rcListaEpisodios.affectOnItemClicks { position, view ->
@@ -70,6 +87,7 @@ class AnimeDetalhesActivity : AppCompatActivity() {
             intent.putExtra("titulo", posicao.titulo)
             intent.putExtra("sinopse", posicao.sinopse)
             intent.putExtra("duracao", posicao.duracao)
+            intent.putExtra("filler", posicao.filler)
             intent.putExtra("tipo", tipo)
             intent.putExtra("imagem", posicao.imagem)
             intent.putExtra("link", posicao.link)
@@ -81,12 +99,15 @@ class AnimeDetalhesActivity : AppCompatActivity() {
         }
     }
 
-    private fun carregarItens(imagem: String?,
+    private fun carregarItens(
+        imagem: String?,
         nomeAnime: String?,
         sinopse: String?,
         estudio: String?,
         genero: String?,
-        ano: String?, tipo: String?
+        ano: String?,
+        tipo: String?,
+        qtEps: Long
     ) {
         Picasso.get().load(imagem).into(ivAnimesDet)
         tvNomeAnimeDet.text = nomeAnime
@@ -94,11 +115,16 @@ class AnimeDetalhesActivity : AppCompatActivity() {
         tvEstudioDet.text = "Estúdio: $estudio"
         tvGeneroDet.text = "Gênero(s) $genero"
         tvAnoDet.text = "Ano: $ano"
-        tvQtEpisodios.text = "Tipo: $tipo"
+        if(tipo == "Filme"){
+            tvQtEpisodios.text = "Tipo: $tipo"
+        }
+        else if(tipo == "Anime") {
+            tvQtEpisodios.text = "Quantidade de episódios: $qtEps\n\nTipo: $tipo"
+        }
     }
 
-    fun checarAnimeFavorito(nomeAnime: String) {
-        db.collection("usuarios").document("luffy@gmail.com").collection("favoritos")
+    private fun checarAnimeFavorito(nomeAnime: String) {
+        db.collection("usuarios").document(auth.currentUser?.email!!).collection("favoritos")
             .whereEqualTo("nomeAnime", nomeAnime).limit(1).get().addOnCompleteListener { task ->
                 if(task.isSuccessful){
                     for(document in task.result){
@@ -127,8 +153,11 @@ class AnimeDetalhesActivity : AppCompatActivity() {
                                      ano: String,
                                      imagem: String,
                                      genero: String,
-                                     auth: FirebaseAuth, codigoAnime: String){
-        val id = db.collection("usuarios").document("luffy@gmail.com").collection("favoritos").document().id
+                                     auth: FirebaseAuth,
+                                     codigoAnime: String,
+                                     tipo: String,
+                                     qtEpisodios: Long){
+        val id = db.collection("usuarios").document(auth.currentUser?.email!!).collection("favoritos").document().id
         val favoritos = ModelFavoritos(
             nomeAnime = nomeAnime,
             sinopse = sinopse,
@@ -136,10 +165,13 @@ class AnimeDetalhesActivity : AppCompatActivity() {
             ano = ano,
             imagem = imagem,
             genero = genero,
-            emailUsuario = "luffy@gmail.com",
-            dataAdicionado = Calendar.getInstance().formatarData(),
+            emailUsuario = auth.currentUser?.email!!,
+            dataAdicionado = Timestamp.now().formatarData(),
             codigo = id,
-            codigoAnime = codigoAnime
+            codigoAnime = codigoAnime,
+            tipo = tipo,
+            qtEpisodios = qtEpisodios
+
         )
         usuarioDao.inserirAnimesFavoritos(favoritos)
     }
@@ -156,6 +188,18 @@ class AnimeDetalhesActivity : AppCompatActivity() {
         }
         else{
             super.onBackPressed()
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        val user = Firebase.auth.currentUser
+        if(user != null){
+            checarAnimeFavorito(nomeAnime)
+            ivAnimeFavorito.visibility = VISIBLE
+        }
+        else{
+            ivAnimeFavorito.visibility = INVISIBLE
         }
     }
 }

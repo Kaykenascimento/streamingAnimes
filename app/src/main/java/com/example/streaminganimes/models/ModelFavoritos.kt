@@ -9,5 +9,7 @@ class ModelFavoritos(val nomeAnime: String,
                      val codigo: String,
                      val dataAdicionado: String,
                      val emailUsuario: String,
-                     val codigoAnime: String)  {
+                     val codigoAnime: String,
+                     val tipo: String,
+                     val qtEpisodios: Long)  {
 }

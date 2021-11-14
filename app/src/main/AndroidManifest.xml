@@ -1,23 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.streaminganimes">
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="Animatio"
+        tools:replace="android:label"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.StreamingAnimes">
         <activity
-            android:name=".activitys.AssistirEpActivity"
-            android:configChanges="orientation|screenSize|layoutDirection"
-            android:screenOrientation="landscape"
+            android:name=".activitys.CadastrarUsuarioActivity"
             android:exported="true" />
         <activity
-            android:name=".activitys.EpisodiosDetalhesActivity"
-            android:screenOrientation="portrait"
+            android:name=".activitys.LoginActivity"
             android:exported="true" />
+        <activity
+            android:name=".activitys.ResultadoBuscaAnimeActivity"
+            android:exported="true" />
+        <activity
+            android:name=".activitys.BuscarAnimesActivity"
+            android:exported="true" />
+        <activity
+            android:name=".activitys.AssistirEpActivity"
+            android:configChanges="orientation|screenSize|layoutDirection"
+            android:exported="true"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".activitys.EpisodiosDetalhesActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activitys.AnimeDetalhesActivity"
             android:exported="true"
@@ -30,7 +44,7 @@
             android:value="false" />
         <meta-data
             android:name="firebase_analytics_collection_enabled"
-            android:value="false" />
+            android:value="true" />
 
         <activity
             android:name=".activitys.inicioActivity"
@@ -45,6 +59,16 @@
         <service android:name="com.google.firebase.messaging.FirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <service android:name="com.example.streaminganimes.classes.DownloadService"
+            android:exported="false"
+            tools:ignore="Instantiatable">
+            <!-- This is needed for Scheduler -->
+            <intent-filter>
+                <action android:name="com.google.android.exoplayer.downloadService.action.RESTART"/>
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </service>
     </application>

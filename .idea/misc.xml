@@ -3,8 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/drawable/custom_edittext.xml" value="0.28489583333333335" />
         <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/drawable/gradient_background_anime_sugerido.xml" value="0.28489583333333335" />
+        <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/drawable/gradient_background_catalogo.xml" value="0.28489583333333335" />
         <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/drawable/gradient_background_episodio_det.xml" value="0.28489583333333335" />
+        <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/drawable/gradient_background_genero.xml" value="0.28489583333333335" />
         <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/drawable/grandient_continue_assistindo.xml" value="0.28489583333333335" />
         <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/drawable/ic_anime_favorito.xml" value="0.28489583333333335" />
         <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/drawable/ic_anime_favorito_desmarcado.xml" value="0.28489583333333335" />
@@ -23,18 +26,46 @@
         <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/drawable/ic_prox_ep.xml" value="0.28489583333333335" />
         <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/drawable/ic_rew.xml" value="0.28489583333333335" />
         <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/drawable/menu_selector.xml" value="1.875" />
-        <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/layout/activity_anime_detalhes.xml" value="0.5" />
+        <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/layout/activity_anime_detalhes.xml" value="0.22" />
+        <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/layout/activity_animes_por_genero.xml" value="0.26875" />
         <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/layout/activity_assistir_ep.xml" value="0.26766304347826086" />
+        <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/layout/activity_buscar_animes.xml" value="0.26875" />
+        <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/layout/activity_cadastrar_usuario.xml" value="0.26875" />
+        <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/layout/activity_cadastrar_usuario2.xml" value="0.26875" />
         <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/layout/activity_episodios_detalhes.xml" value="0.2644927536231884" />
-        <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/layout/activity_inicio.xml" value="0.25" />
+        <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/layout/activity_inicio.xml" value="0.5" />
         <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/layout/activity_inicio2.xml" value="0.26875" />
+        <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/layout/activity_login.xml" value="0.33" />
+        <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/layout/activity_resultado_busca_animes.xml" value="0.26875" />
         <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/layout/adapter_anime_sugerido.xml" value="0.2546875" />
         <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/layout/adapter_animes.xml" value="0.5" />
+        <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/layout/adapter_busca_animes.xml" value="0.26875" />
+        <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/layout/adapter_catalogo.xml" value="0.2546875" />
         <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/layout/adapter_continue_assistindo.xml" value="0.2546875" />
-        <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/layout/adapter_episodios.xml" value="0.2546875" />
+        <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/layout/adapter_episodios.xml" value="0.5" />
+        <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/layout/adapter_favoritos.xml" value="0.26222826086956524" />
+        <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/layout/adapter_generos.xml" value="0.26875" />
+        <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/layout/adapter_historico.xml" value="0.33" />
         <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/layout/custom_controller_videoview.xml" value="0.75" />
+        <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/layout/fragment_buscar_animes.xml" value="0.26875" />
+        <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/layout/fragment_catalogo.xml" value="0.2546875" />
+        <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/layout/fragment_conta.xml" value="0.26875" />
+        <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/layout/fragment_conta_sem_login.xml" value="0.2563405797101449" />
+        <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/layout/fragment_favoritos.xml" value="0.26875" />
+        <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/layout/fragment_favoritos_lista.xml" value="0.26875" />
+        <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/layout/fragment_favoritos_lista_vazio.xml" value="0.26875" />
+        <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/layout/fragment_favoritos_sem_login.xml" value="0.2563405797101449" />
+        <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/layout/fragment_favoritos_vazio.xml" value="0.18" />
+        <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/layout/fragment_generos.xml" value="0.1" />
+        <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/layout/fragment_generos_lista.xml" value="0.26875" />
+        <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/layout/fragment_historico.xml" value="0.26875" />
+        <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/layout/fragment_historico_sem_login.xml" value="0.2563405797101449" />
+        <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/layout/fragment_historico_vazio.xml" value="0.26875" />
         <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/layout/fragment_home.xml" value="0.33" />
         <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/menu/bt_navigation_menu.xml" value="0.26875" />
+        <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/menu/tb_menu.xml" value="0.26875" />
+        <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/menu/tb_menu_inicio.xml" value="0.26875" />
+        <entry key="..\:/Projetos/streamingAnimes/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.28489583333333335" />
       </map>
     </option>
   </component>

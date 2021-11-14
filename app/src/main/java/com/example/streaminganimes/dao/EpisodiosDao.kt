@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.streaminganimes.activitys.AnimeDetalhesActivity
 import com.example.streaminganimes.activitys.AssistirEpActivity
+import com.example.streaminganimes.activitys.EpisodiosDetalhesActivity
 import com.example.streaminganimes.activitys.inicioActivity
 import com.example.streaminganimes.adapters.AdapterEpisodios
 import com.example.streaminganimes.firebase.ConfFireBase
@@ -30,7 +31,10 @@ class EpisodiosDao {
         return context as Activity?
     }
 
-    fun carregarEpisodios(codigoAnime: String, arrayList: ArrayList<ModelEpisodios>, recyclerView: RecyclerView, tipo: String, textView: TextView){
+    fun carregarEpisodios(codigoAnime: String, arrayList: ArrayList<ModelEpisodios>,
+                          recyclerView: RecyclerView,
+                          tipo: String,
+                          textView: TextView, context: Context){
         db.collection("animes").document(codigoAnime).collection("episodios").orderBy("titulo", Query.Direction.ASCENDING).get().addOnCompleteListener { task ->
             if(task.isSuccessful){
                 for(document in task.result){
@@ -52,15 +56,21 @@ class EpisodiosDao {
                     else if(arrayList.size <1){
                         textView.text = "Sem Episódios - Em breve"
                     }
-                    val adapter = AdapterEpisodios(arrayList, tipo)
+                    val adapter = AdapterEpisodios(arrayList, tipo, context)
                     recyclerView.adapter = adapter
                 }
             }
         }
     }
 
-    fun carregarProximoEp(codigoAnime: String, tituloEp: String, tipo: String, nomeAnime: String, imagemAnime: String,  context: Context){
-        db.collection("animes").document(codigoAnime).collection("episodios").orderBy("titulo", Query.Direction.ASCENDING).startAfter(tituloEp).limit(1).get().addOnCompleteListener { task ->
+    fun carregarProximoEp(codigoAnime: String,
+                          tituloEp: String,
+                          tipo: String,
+                          nomeAnime: String,
+                          imagem: String,
+                          context: Context){
+        db.collection("animes").document(codigoAnime).collection("episodios")
+            .orderBy("titulo", Query.Direction.ASCENDING).startAfter(tituloEp).limit(1).get().addOnCompleteListener { task ->
             if(task.isSuccessful){
                 for(document in task.result){
                     val episodio = ModelEpisodios(
@@ -85,7 +95,7 @@ class EpisodiosDao {
                     intent.putExtra("tipo", tipo)
                     intent.putExtra("saga", episodio.saga)
                     intent.putExtra("nomeAnime", nomeAnime)
-                    intent.putExtra("imagemAnime", imagemAnime)
+                    intent.putExtra("imagem", imagem)
                     activity.startActivity(intent)
                 }
                 if(task.result.isEmpty){
@@ -95,17 +105,44 @@ class EpisodiosDao {
         }
     }
 
-    fun carregarAssistirAgora(codigoAnime: String, nomeAnime: String, context: Context){
-        db.collection("animes").document(codigoAnime).collection("episodios").orderBy("titulo", Query.Direction.ASCENDING).limit(1).get().addOnCompleteListener { task ->
+    fun carregarAssistirAgora(codigoAnime: String,
+                              nomeAnime: String,
+                              context: Context){
+        db.collection("animes").document(codigoAnime).collection("episodios")
+            .orderBy("titulo", Query.Direction.ASCENDING).limit(1).get().addOnCompleteListener { task ->
             if(task.isSuccessful){
                 for(document in task.result){
-                    //val episodio = ModelEpisodios()
+                    val episodio = ModelEpisodios(
+                        ano = document["ano"] as String,
+                        codigo = document["codigo"] as String,
+                        duracao = document["duracao"] as String,
+                        filler = document["filler"] as Boolean,
+                        imagem = document["imagem"] as String,
+                        link = document["link"] as String,
+                        saga = document["saga"] as String,
+                        sinopse = document["sinopse"] as String,
+                        titulo = document["titulo"] as String
+                    )
+                    val activity = desembrulhar(context) as AppCompatActivity
+                    val intent = Intent(activity, EpisodiosDetalhesActivity::class.java)
+                    intent.putExtra("titulo", episodio.titulo)
+                    intent.putExtra("link", episodio.link)
+                    intent.putExtra("codigoEp", episodio.codigo)
+                    intent.putExtra("codigoAnime", codigoAnime)
+                    intent.putExtra("tipo", "Anime")
+                    intent.putExtra("nomeAnime", nomeAnime)
+                    intent.putExtra("duracao", episodio.duracao)
+                    intent.putExtra("imagem", episodio.imagem)
+                    intent.putExtra("sinopse", episodio.sinopse)
+                    intent.putExtra("saga", episodio.saga)
+                    activity.startActivity(intent)
                 }
             }
         }
     }
 
-    fun chamarTelaDetalhesAnimes(codigoAnime: String, context: Context){
+    fun chamarTelaDetalhesAnimes(codigoAnime: String,
+                                 context: Context){
         db.collection("animes").whereEqualTo("codigo", codigoAnime).get().addOnCompleteListener { task ->
                 if(task.isSuccessful){
                     for (document in task.result) {
